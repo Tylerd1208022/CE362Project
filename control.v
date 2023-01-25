@@ -42,16 +42,49 @@ module control(INS,ALUCtrl);
     wire ADDI, ADDUI, SUBI, SUBUI, ANDI, ORI, XORI, LHI;
     wire RFE, TRAP, JR, JALR, SLLI, SRLI, SRAI;
     wire SEQI, SNEI, SLTI, SGTI, SLEI, SGEI;
-    wire LB, LH, LW, LBU, LHU, LF, LD;
-    wire SB, SH, SW, SF, SD;
-    sixBitAnd(notOP[5],notOP[4],notOP[3],notOP[2],INS[27],notOP[0],J);
-    sixBitAnd(notOP[5],notOP[4],notOP[3],notOP[2],INS[27],INS[26],JAL);
-    sixBitAnd(notOP[5],notOP[4],notOP[3],INS[28],notOP[1],notOP[0],BEQZ);
-    sixBitAnd(notOP[5],notOP[4],notOP[3],INS[28],notOP[1],INS[26],BNEZ);
-    sixBitAnd(notOP[5],notOP[4],INS[29],notOP[2],notOP[1],notOP[0],ADDI);
-    sixBitAnd(notOP[5],notOP[4],INS[29],notOP[2],notOP[1],INS[26],ADDUI);
-    sixBitAnd(notOP[5],notOP[4],INS[29],notOP[2],INS[27],notOP[0],SUBI);
-    sixBitAnd(notOP[5],notOP[4],INS[29],notOP[2],INS[27],INS[26],SUBUI);
+    wire LB, LH, LW, LBU, LHU;
+    wire SB, SH, SW;
+    sixBitAnd J(notOP[5],notOP[4],notOP[3],notOP[2],INS[27],notOP[0],J);
+    sixBitAnd JAL(notOP[5],notOP[4],notOP[3],notOP[2],INS[27],INS[26],JAL);
+    sixBitAnd BEQZ(notOP[5],notOP[4],notOP[3],INS[28],notOP[1],notOP[0],BEQZ);
+    sixBitAnd BNEZ(notOP[5],notOP[4],notOP[3],INS[28],notOP[1],INS[26],BNEZ);
+    sixBitAnd ADDI(notOP[5],notOP[4],INS[29],notOP[2],notOP[1],notOP[0],ADDI);
+    sixBitAnd ADDUI(notOP[5],notOP[4],INS[29],notOP[2],notOP[1],INS[26],ADDUI);
+    sixBitAnd SUBI(notOP[5],notOP[4],INS[29],notOP[2],INS[27],notOP[0],SUBI);
+    sixBitAnd SUBUI(notOP[5],notOP[4],INS[29],notOP[2],INS[27],INS[26],SUBUI);
+    sixBitAnd ANDI(notOP[5],notOP[4],INS[29],INS[28],notOP[1],notOP[0],ANDI);
+    sixBitAnd ORI(notOP[5],notOP[4],INS[29],INS[28],notOP[1],INS[26],ORI);
+    sixBitAnd XORI(notOP[5],notOP[4],INS[29],INS[28],INS[27],notOP[0],XORI);
+    sixBitAnd LHI(notOP[5],notOP[4],INS[29],INS[28],INS[27],INS[26],LHI);//Load High Immediate Rd <- I << 16
+    sixBItAnd RFE(notOP[5],INS[30],notOP[3],notOP[2],notOP[1],notOP[0],RFE);//Return from Exception: Catches
+    sixBitAnd TRAP(notOP[5],INS[30],notOP[3],notOP[2],notOP[1],INS[26],TRAP);//Exception Throw
+    sixBitAnd JR(notOP[5],INS[30],notOP[3],notOP[2],INS[27],notOP[0],JR);//Jump Reg
+    sixBitAnd JALR(notOP[5],INS[30],notOP[3],notOP[2],INS[27],notOP[26],JALR);
+    sixBitAnd SLLI(notOP[5],INS[30],notOP[3],INS[28],notOP[1],notOP[0],SLLI);//Shift Logical Left Immediate
+    sixBitAnd SRLI(notOP[5],INS[30],notOP[3],INS[28],INS[27],notOP[0],SRLI);//SR Logical I
+    sixBitAnd SRAI(notOP[5],INS[30],notOP[3],INS[28],INS[27],INS[26],SRAI);//SR arithmetic I
+    sixBitAnd SEQI(notOP[5],INS[30],INS[29],notOP[2],notOP[1],notOP[0],SEQI);//Immediate Compare
+    sixBitAnd SNEI(notOP[5],INS[30],INS[29],notOP[2],notOP[1],INS[26],SNEI);
+    sixBitAnd SLTI(notOP[5],INS[30],INS[29],notOP[2],INS[27],notOP[0],SLTI);
+    sixBitAnd SGTI(notOP[5],INS[30],INS[29],notOP[2],INS[27],INS[26],SGTI);
+    sixBitAnd SLEI(notOP[5],INS[30],INS[29],INS[28],notOP[1],notOP[0],SLEI);
+    sixBitAnd SGEI(notOP[5],INS[30],INS[29],INS[28],notOP[1],INS[26],SGEI);//End Immediate Compare
+    sixBitAnd LB(INS[31],notOP[4],notOP[3],notOP[2],notOP[1],notOP[0],LB);//Load SIGN EXTENDED
+    sixBitAnd LH(INS[31],notOP[4],notOP[3],notOP[2],notOP[1],INS[26],LH);
+    sixBitAnd LW(INS[31],notOP[4],notOP[3],notOP[2],INS[27],INS[26],LW);
+    sixBitAnd LBU(INS[31],notOP[4],notOP[3],INS[28],notOP[1],notOP[26],LBU);
+    sixBitAnd LHU(INS[31],notOP[4],notOP[3],INS[28],notOP[1],INS[26],LHU);
+    sixBitAnd SB(INS[31],notOP[4],INS[29],notOP[2],notOP[1],notOP[0],SB);
+    sixBitAnd SH(INS[31],notOP[4],INS[29],notOP[2],notOP[1],INS[26],SH);
+    sixBitAnd SW(INS[31],notOP[4],INS[29],notOP[2],INS[27],INS[26],SW);
+    //end I/J Type
+    //FLOPs
+    wire FLOP;
+    wire MULT;
+    wire MULTU;
+    sixBitAnd(notOP[5],notOP[4],notOP[3],notOP[2],notOP[1],INS[26],FLOP);
+    and_gate MULT(FLOP,INS[3],MULT);
+    and_gate MULTU(FLOP,notFunc[3],MULTU);s
         
     
     
